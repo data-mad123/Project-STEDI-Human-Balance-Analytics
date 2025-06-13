@@ -1,8 +1,0 @@
-# Load accelerometer data
-   accelerometer_dyf = glueContext.create_dynamic_frame.from_catalog(database = "your_database", table_name = "accelerometer_landing")
-
-   # Filter trusted accelerometer data
-   trusted_accelerometer = Filter.apply(frame = accelerometer_dyf, f = lambda x: x["user"] in trusted_customers)
-
-   # Write to trusted zone
-   glueContext.write_dynamic_frame.from_catalog(frame = trusted_accelerometer, database = "your_database", table_name = "accelerometer_trusted")
