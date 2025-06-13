@@ -1,0 +1,20 @@
+ import sys
+   from awsglue.transforms import *
+   from awsglue.utils import getResolvedOptions
+   from pyspark.context import SparkContext
+   from awsglue.context import GlueContext
+   from awsglue.dynamicframe import DynamicFrame
+
+   args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+
+   glueContext = GlueContext(SparkContext.getOrCreate())
+   spark = glueContext.spark_session
+
+   # Load customer data
+   customer_dyf = glueContext.create_dynamic_frame.from_catalog(database = "your_database", table_name = "customer_landing")
+
+   # Filter trusted customers
+   trusted_customers = Filter.apply(frame = customer_dyf, f = lambda x: x["sharewithresearchasofdate"] is not None)
+
+   # Write to trusted zone
+   glueContext.write_dynamic_frame.from_catalog(frame = trusted_customers, database = "your_database", table_name = "customer_trusted")
