@@ -1,8 +1,0 @@
-# Load step trainer data
-   step_trainer_dyf = glueContext.create_dynamic_frame.from_catalog(database = "your_database", table_name = "step_trainer_landing")
-
-   # Filter based on curated customers
-   trusted_step_trainer = Filter.apply(frame = step_trainer_dyf, f = lambda x: x["serialNumber"] in curated_customers.select("serialnumber"))
-
-   # Write to trusted zone
-   glueContext.write_dynamic_frame.from_catalog(frame = trusted_step_trainer, database = "your_database", table_name = "step_trainer_trusted")
