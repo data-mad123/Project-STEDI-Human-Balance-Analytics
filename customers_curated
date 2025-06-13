@@ -1,0 +1,11 @@
+# Load trusted customer data
+   trusted_customer_dyf = glueContext.create_dynamic_frame.from_catalog(database = "your_database", table_name = "customer_trusted")
+
+   # Load accelerometer data
+   accelerometer_trusted_dyf = glueContext.create_dynamic_frame.from_catalog(database = "your_database", table_name = "accelerometer_trusted")
+
+   # Create curated customers
+   curated_customers = trusted_customer_dyf.toDF().join(accelerometer_trusted_dyf.toDF(), trusted_customer_dyf["email"] == accelerometer_trusted_dyf["user"])
+
+   # Write to curated zone
+   glueContext.write_dynamic_frame.from_catalog(frame = DynamicFrame.fromDF(curated_customers, glueContext, "curated_customers"), database = "your_database", table_name = "customers_curated")
